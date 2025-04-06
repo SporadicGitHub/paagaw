@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Paagaw Challenge</title>
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="Paagaw Logo.png"">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <a href="#" class="navbar-brand">Sub 0 Productions</a>
+      <div class="navbar-right">
+        <button class="music-toggle" aria-label="Toggle music">
+          <i class="fas fa-volume-up"></i>
+        </button>
+        <a href="mailto:paagawchallenge@gmail.com" class="navbar-contact">paagawchallenge@gmail.com</a>
+      </div>
+    </nav>
+
+    <audio id="bgMusic" loop autoplay>
+      <source src="erpo.mp3" type="audio/mpeg">
+      Your browser does not support the audio element.
+    </audio>
+
+    <section class="hero">
+      <video class="hero-video" autoplay muted loop playsinline>
+        <source src="PaagawPreview.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <img
+          src="LogoDark.png"
+          alt="Paagaw Challenge Logo"
+          class="hero-logo"
+        />
+        <h1>Paagaw Challenge</h1>
+        <p>Run! Jump! Collect all candies and coins, and win the challenge!</p>
+        <button class="hero-btn">Get your Candies!</button>
+        <p><a href="#" class="hero-link"></a></p>
+        <div class="hero-chevron">
+          <i class="fas fa-chevron-down"></i>
+        </div>
+      </div>
+    </section>
+
+    <section class="cards-section">
+      <div class="cards-container">
+        <div class="video-cards">
+          <div class="card-wrapper">
+            <div class="video-card">
+              <video class="card-video" autoplay muted loop playsinline>
+                <source src="Run.mp4" type="video/mp4" />
+              </video>
+            </div>
+            <div class="card-text">RUN!</div>
+          </div>
+
+          <div class="card-wrapper">
+            <div class="video-card">
+              <video class="card-video" autoplay muted loop playsinline>
+                <source src="Jump.mp4" type="video/mp4" />
+              </video>
+            </div>
+            <div class="card-text">COLLECT!</div>
+          </div>
+
+          <div class="card-wrapper">
+            <div class="video-card">
+              <video class="card-video" autoplay muted loop playsinline>
+                <source src="Win.mp4" type="video/mp4" />
+              </video>
+            </div>
+            <div class="card-text">WIN!</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="footer-item">Sub 0 Productions 2025</div>
+      <div class="footer-item">Paagawa Challenge 2025</div>
+      <div class="footer-item">paagawchallenge@gmail.com</div>
+    </footer>
+    <script>
+      // Navbar scroll behavior
+      let lastScrollY = window.scrollY;
+      const navbar = document.querySelector('.navbar');
+
+      window.addEventListener('scroll', () => {
+        const currentScrollY = window.scrollY;
+        
+        if (currentScrollY > lastScrollY) {
+          // Scrolling down
+          navbar.classList.add('hidden');
+        } else {
+          // Scrolling up
+          navbar.classList.remove('hidden');
+        }
+        
+        lastScrollY = currentScrollY;
+      });
+
+      // Music controls
+      const musicToggle = document.querySelector('.music-toggle');
+      const musicIcon = musicToggle.querySelector('i');
+      const bgMusic = document.getElementById('bgMusic');
+      
+      // Function to initialize music
+      function initializeMusic() {
+        bgMusic.volume = 0.08; //
+        
+        // Try to play immediately
+        bgMusic.play().then(() => {
+          musicIcon.className = 'fas fa-volume-up';
+        }).catch(() => {
+          // If autoplay was prevented, we'll need user interaction
+          musicIcon.className = 'fas fa-volume-mute';
+        });
+      }
+
+      // Initialize music as soon as possible
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initializeMusic);
+      } else {
+        initializeMusic();
+      }
+
+      // Add user interaction backup
+      document.addEventListener('click', () => {
+        if (bgMusic.paused) {
+          bgMusic.play();
+          musicIcon.className = 'fas fa-volume-up';
+        }
+      }, { once: true });
+
+      musicToggle.addEventListener('click', () => {
+        if (bgMusic.paused) {
+          bgMusic.play();
+          musicIcon.className = 'fas fa-volume-up';
+        } else {
+          bgMusic.pause();
+          musicIcon.className = 'fas fa-volume-mute';
+        }
+      });
+    </script>
+  </body>
+</html>
