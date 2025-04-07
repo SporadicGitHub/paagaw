@@ -47,7 +47,7 @@
         <p>Run! Jump! Collect all candies and coins, and win the challenge!</p>
         <button class="hero-btn">Get your Candies!</button>
         <p><a href="#" class="hero-link"></a></p>
-        <div class="hero-chevron">
+        <div class="hero-chevron" id="scrollButton">
           <i class="fas fa-chevron-down"></i>
         </div>
       </div>
@@ -95,6 +95,14 @@
       // Navbar scroll behavior
       let lastScrollY = window.scrollY;
       const navbar = document.querySelector('.navbar');
+
+      // Add scroll button functionality
+      const scrollButton = document.getElementById('scrollButton');
+      const cardsSection = document.querySelector('.cards-section');
+
+      scrollButton.addEventListener('click', () => {
+        cardsSection.scrollIntoView({ behavior: 'smooth' });
+      });
 
       window.addEventListener('scroll', () => {
         const currentScrollY = window.scrollY;
@@ -151,6 +159,34 @@
           bgMusic.pause();
           musicIcon.className = 'fas fa-volume-mute';
         }
+      });
+
+      // Modify video elements for better mobile compatibility
+      document.addEventListener('DOMContentLoaded', () => {
+        const videos = document.querySelectorAll('video');
+        videos.forEach(video => {
+          // Add playsinline attribute for iOS
+          video.setAttribute('playsinline', '');
+          video.setAttribute('webkit-playsinline', '');
+          
+          // Try to play the video
+          const playPromise = video.play();
+          
+          if (playPromise !== undefined) {
+            playPromise.catch(() => {
+              // If autoplay fails, show a play button overlay
+              const playButton = document.createElement('div');
+              playButton.className = 'video-play-button';
+              playButton.innerHTML = '<i class="fas fa-play"></i>';
+              video.parentNode.appendChild(playButton);
+              
+              playButton.addEventListener('click', () => {
+                video.play();
+                playButton.remove();
+              });
+            });
+          }
+        });
       });
     </script>
   </body>
