@@ -2,11 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Paagaw Challenge</title>
 
-    <!-- Favicons -->
-    <link rel="icon" type="image/x-icon" href="Paagaw Logo.png"">
+    <link rel="icon" type="image/x-icon" href="Paagaw Logo.png" />
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link
@@ -17,17 +16,33 @@
   </head>
   <body>
     <nav class="navbar">
-      <a href="#" class="navbar-brand">Sub 0 Productions</a>
+      <a href="#" class="navbar-brand">Sub Zero Studio</a>
       <div class="navbar-right">
-        <button class="music-toggle" aria-label="Toggle music">
-          <i class="fas fa-volume-up"></i>
+        <div class="navbar-links">
+          <button class="music-toggle" aria-label="Toggle music">
+            <i class="fas fa-volume-up"></i>
+          </button>
+          <a href="mailto:paagawchallenge@gmail.com" class="navbar-contact"
+            >paagawchallenge@gmail.com</a
+          >
+        </div>
+        <button class="navbar-toggler" aria-label="Toggle navigation">
+          <i class="fas fa-bars"></i>
         </button>
-        <a href="mailto:paagawchallenge@gmail.com" class="navbar-contact">paagawchallenge@gmail.com</a>
       </div>
     </nav>
 
-    <audio id="bgMusic" loop autoplay>
-      <source src="erpo.mp3" type="audio/mpeg">
+    <div class="mobile-menu">
+      <button class="music-toggle-mobile" aria-label="Toggle music">
+        <i class="fas fa-volume-up"></i> <span>Toggle Music</span>
+      </button>
+      <a href="mailto:paagawchallenge@gmail.com" class="navbar-contact-mobile"
+        >paagawchallenge@gmail.com</a
+      >
+      </div>
+
+    <audio id="bgMusic" loop>
+      <source src="erpo.mp3" type="audio/mpeg" />
       Your browser does not support the audio element.
     </audio>
 
@@ -42,44 +57,45 @@
           src="LogoDark.png"
           alt="Paagaw Challenge Logo"
           class="hero-logo"
+          onerror="this.onerror=null; this.src='https://placehold.co/400x200/cccccc/ffffff?text=Logo+Not+Found';"
         />
-        <h1>Paagaw Challenge</h1>
+        <h1></h1>
         <p>Run! Jump! Collect all candies and coins, and win the challenge!</p>
         <button class="hero-btn">Get your Candies!</button>
-        <p><a href="#" class="hero-link"></a></p>
         <div class="hero-chevron" id="scrollButton">
           <i class="fas fa-chevron-down"></i>
         </div>
       </div>
     </section>
 
-    <section class="cards-section">
+    <section class="cards-section" id="cards-section">
       <div class="cards-container">
         <div class="video-cards">
           <div class="card-wrapper">
             <div class="video-card">
               <video class="card-video" autoplay muted loop playsinline>
                 <source src="Run.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
               </video>
-            </div>
+              </div>
             <div class="card-text">RUN!</div>
           </div>
-
           <div class="card-wrapper">
             <div class="video-card">
               <video class="card-video" autoplay muted loop playsinline>
                 <source src="Jump.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
               </video>
-            </div>
+              </div>
             <div class="card-text">COLLECT!</div>
           </div>
-
           <div class="card-wrapper">
             <div class="video-card">
               <video class="card-video" autoplay muted loop playsinline>
                 <source src="Win.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
               </video>
-            </div>
+              </div>
             <div class="card-text">WIN!</div>
           </div>
         </div>
@@ -87,107 +103,182 @@
     </section>
 
     <footer class="footer">
-      <div class="footer-item">Sub 0 Productions 2025</div>
-      <div class="footer-item">Paagawa Challenge 2025</div>
+      <div class="footer-item">Sub Zero Studio</div>
+      <div class="footer-item">Paagaw Challenge</div>
       <div class="footer-item">paagawchallenge@gmail.com</div>
     </footer>
+
     <script>
-      // Navbar scroll behavior
+      // --- DOM Element Selection ---
+      const navbar = document.querySelector(".navbar");
+      const navbarToggler = document.querySelector(".navbar-toggler");
+      const mobileMenu = document.querySelector(".mobile-menu");
+      const scrollButton = document.getElementById("scrollButton");
+      const cardsSection = document.getElementById("cards-section"); // Use ID selector
+      const musicToggle = document.querySelector(".navbar-links .music-toggle"); // Desktop toggle
+      const musicToggleMobile = document.querySelector(".music-toggle-mobile"); // Mobile toggle
+      const musicIcon = musicToggle.querySelector("i");
+      const musicIconMobile = musicToggleMobile.querySelector("i");
+      const bgMusic = document.getElementById("bgMusic");
+      const allVideos = document.querySelectorAll("video"); // Get all videos
+
       let lastScrollY = window.scrollY;
-      const navbar = document.querySelector('.navbar');
+      let isMusicInitialized = false; // Flag to prevent multiple initializations
+      let isUserInteracted = false; // Flag for first user interaction
 
-      // Add scroll button functionality
-      const scrollButton = document.getElementById('scrollButton');
-      const cardsSection = document.querySelector('.cards-section');
+      // --- Navbar Hide/Show on Scroll ---
+      window.addEventListener(
+        "scroll",
+        () => {
+          const currentScrollY = window.scrollY;
+          // Hide navbar only if scrolling down AND mobile menu is NOT open
+          if (currentScrollY > lastScrollY && !mobileMenu.classList.contains("active")) {
+            navbar.classList.add("hidden");
+          } else {
+            navbar.classList.remove("hidden");
+          }
+          lastScrollY = currentScrollY;
+        },
+        { passive: true }
+      ); // Use passive listener for performance
 
-      scrollButton.addEventListener('click', () => {
-        cardsSection.scrollIntoView({ behavior: 'smooth' });
-      });
-
-      window.addEventListener('scroll', () => {
-        const currentScrollY = window.scrollY;
-        
-        if (currentScrollY > lastScrollY) {
-          // Scrolling down
-          navbar.classList.add('hidden');
-        } else {
-          // Scrolling up
-          navbar.classList.remove('hidden');
-        }
-        
-        lastScrollY = currentScrollY;
-      });
-
-      // Music controls
-      const musicToggle = document.querySelector('.music-toggle');
-      const musicIcon = musicToggle.querySelector('i');
-      const bgMusic = document.getElementById('bgMusic');
-      
-      // Function to initialize music
-      function initializeMusic() {
-        bgMusic.volume = 0.08; //
-        
-        // Try to play immediately
-        bgMusic.play().then(() => {
-          musicIcon.className = 'fas fa-volume-up';
-        }).catch(() => {
-          // If autoplay was prevented, we'll need user interaction
-          musicIcon.className = 'fas fa-volume-mute';
+      // --- Scroll Down Button ---
+      if (scrollButton && cardsSection) {
+        scrollButton.addEventListener("click", () => {
+          cardsSection.scrollIntoView({ behavior: "smooth", block: "start" }); // Scroll to the top of the section
         });
       }
 
-      // Initialize music as soon as possible
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initializeMusic);
-      } else {
-        initializeMusic();
+      // --- Hamburger Menu Toggle ---
+      if (navbarToggler && mobileMenu) {
+        navbarToggler.addEventListener("click", () => {
+          mobileMenu.classList.toggle("active"); // Toggle visibility
+          navbarToggler.querySelector("i").classList.toggle("fa-bars"); // Change icon
+          navbarToggler.querySelector("i").classList.toggle("fa-times"); // Change icon
+          // Prevent body scroll when menu is open
+          document.body.style.overflow = mobileMenu.classList.contains("active")
+            ? "hidden"
+            : "";
+          // Keep navbar visible when menu is open
+          if (mobileMenu.classList.contains("active")) {
+              navbar.classList.remove('hidden');
+          }
+        });
       }
 
-      // Add user interaction backup
-      document.addEventListener('click', () => {
-        if (bgMusic.paused) {
-          bgMusic.play();
-          musicIcon.className = 'fas fa-volume-up';
-        }
-      }, { once: true });
+      // --- Music Control ---
+      function setMusicIcon(isPlaying) {
+        const iconClass = isPlaying ? "fa-volume-up" : "fa-volume-mute";
+        if (musicIcon) musicIcon.className = `fas ${iconClass}`;
+        if (musicIconMobile) musicIconMobile.className = `fas ${iconClass}`;
+      }
 
-      musicToggle.addEventListener('click', () => {
+      function toggleMusicPlayback() {
+        if (!isMusicInitialized) return; // Don't toggle if not ready
+
         if (bgMusic.paused) {
-          bgMusic.play();
-          musicIcon.className = 'fas fa-volume-up';
+          bgMusic
+            .play()
+            .then(() => setMusicIcon(true))
+            .catch((e) => console.error("Error playing music:", e));
         } else {
           bgMusic.pause();
-          musicIcon.className = 'fas fa-volume-mute';
+          setMusicIcon(false);
         }
-      });
+      }
 
-      // Modify video elements for better mobile compatibility
-      document.addEventListener('DOMContentLoaded', () => {
-        const videos = document.querySelectorAll('video');
-        videos.forEach(video => {
-          // Add playsinline attribute for iOS
-          video.setAttribute('playsinline', '');
-          video.setAttribute('webkit-playsinline', '');
-          
-          // Try to play the video
+      function initializeMusic() {
+        if (isMusicInitialized || !bgMusic) return; // Prevent double init or if no audio element
+
+        bgMusic.volume = 0.08; // Set initial volume
+        isMusicInitialized = true; // Mark as initialized
+
+        // Try to play initially (might be blocked)
+        bgMusic.play()
+          .then(() => {
+            console.log("Background music autoplay started.");
+            setMusicIcon(true);
+            isUserInteracted = true; // Autoplay counts as interaction here
+          })
+          .catch(() => {
+            console.log("Autoplay prevented. Waiting for user interaction.");
+            setMusicIcon(false); // Show muted icon initially
+            // Add a one-time listener for the first interaction
+            document.body.addEventListener(
+              "click",
+              () => {
+                if (!isUserInteracted && bgMusic.paused) {
+                   bgMusic.play()
+                     .then(() => {
+                        console.log("Music started on user interaction.");
+                        setMusicIcon(true);
+                     })
+                     .catch((e) => console.error("Error playing music after interaction:", e));
+                }
+                isUserInteracted = true; // Mark interaction happened
+              },
+              { once: true, passive: true }
+            );
+          });
+      }
+
+      // Add listeners to both music buttons
+      if (musicToggle) musicToggle.addEventListener("click", toggleMusicPlayback);
+      if (musicToggleMobile) musicToggleMobile.addEventListener("click", toggleMusicPlayback);
+
+      // --- Video Handling (Playsinline & Autoplay Fallback) ---
+      function handleVideoAutoplay() {
+        allVideos.forEach((video) => {
+          // Ensure playsinline attributes are set for iOS
+          video.setAttribute("playsinline", "");
+          video.setAttribute("webkit-playsinline", "");
+
+          // Attempt to play the video
           const playPromise = video.play();
-          
+
           if (playPromise !== undefined) {
-            playPromise.catch(() => {
-              // If autoplay fails, show a play button overlay
-              const playButton = document.createElement('div');
-              playButton.className = 'video-play-button';
-              playButton.innerHTML = '<i class="fas fa-play"></i>';
+            playPromise.catch((error) => {
+              // Autoplay was prevented.
+              console.log(`Autoplay failed for ${video.currentSrc || 'video'}:`, error);
+
+              // Check if a play button already exists
+              if (video.parentNode.querySelector('.video-play-button')) return;
+
+              // Create and add a play button overlay
+              const playButton = document.createElement("div");
+              playButton.className = "video-play-button"; // Style this in CSS
+              playButton.innerHTML = '<i class="fas fa-play"></i>'; // Play icon
+              playButton.setAttribute('aria-label', 'Play video');
+
+              // Insert the button into the video's parent container
+              video.parentNode.style.position = 'relative'; // Ensure parent can contain the absolute button
               video.parentNode.appendChild(playButton);
-              
-              playButton.addEventListener('click', () => {
-                video.play();
-                playButton.remove();
-              });
+
+              // Add click listener to the play button
+              playButton.addEventListener("click", () => {
+                video
+                  .play()
+                  .then(() => {
+                    playButton.remove(); // Remove button on successful play
+                  })
+                  .catch(err => {
+                      console.error("Error playing video after button click:", err);
+                      // Optionally show an error message to the user
+                  });
+              }, { once: true }); // Remove listener after first click
             });
           }
         });
+      }
+
+
+      // --- Initialization ---
+      // Use DOMContentLoaded for reliability
+      document.addEventListener("DOMContentLoaded", () => {
+          initializeMusic();
+          handleVideoAutoplay(); // Handle video autoplay after DOM is ready
       });
+
     </script>
   </body>
 </html>
